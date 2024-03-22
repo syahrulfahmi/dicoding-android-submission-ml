@@ -5,4 +5,11 @@
     <string name="gallery">Galeri</string>
     <string name="analyze">Analyze</string>
     <string name="result">Hasil Analisis</string>
+    <string name="app_related_news">Berita Terkait</string>
+    <string name="app_permission_granted">Permission request granted</string>
+    <string name="app_permission_denied">Permission request denied</string>
+    <string name="app_no_media_selected">No Media Selected</string>
+    <string name="app_canceled">canceled</string>
+    <string name="app_confidence_result">%1$s : %2$s</string>
+    <string name="understand">Mengerti</string>
 </resources>

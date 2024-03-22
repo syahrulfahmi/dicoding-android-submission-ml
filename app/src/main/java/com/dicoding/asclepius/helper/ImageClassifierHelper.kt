@@ -18,10 +18,10 @@ import org.tensorflow.lite.task.vision.classifier.Classifications
 import org.tensorflow.lite.task.vision.classifier.ImageClassifier
 
 class ImageClassifierHelper(
-    val context: Context,
-    val thresold: Float = 0.1f,
-    val maxResult: Int = 3,
-    val modelName: String = "cancer_classification.tflite",
+    private val context: Context,
+    private val threshold: Float = 0.1f,
+    private val maxResult: Int = 3,
+    private val modelName: String = "cancer_classification.tflite",
     val classifierListener: ClassifierListener?
 ) {
     private var imageClassifier: ImageClassifier? = null
@@ -33,7 +33,7 @@ class ImageClassifierHelper(
     private fun setupImageClassifier() {
         // TODO: Menyiapkan Image Classifier untuk memproses gambar.
         val optionsBuilder = ImageClassifier.ImageClassifierOptions.builder()
-            .setScoreThreshold(thresold)
+            .setScoreThreshold(threshold)
             .setMaxResults(maxResult)
         val baseOptionsBuilder = BaseOptions.builder()
             .setNumThreads(4)
@@ -62,18 +62,17 @@ class ImageClassifierHelper(
             .add(CastOp(DataType.UINT8))
             .build()
 
-//            .copy(Bitmap.Config.ARGB_8888, true)?.let { bitmap ->
-//                val tensorImage = imageProcessor.process(TensorImage.fromBitmap(bitmap))
-//            }
-        val tensorImage = imageProcessor.process(TensorImage.fromBitmap(imageUri.toImageBitmap()))
+        imageUri.toImageBitmap().copy(Bitmap.Config.ARGB_8888, true)?.let { bitmap: Bitmap ->
+            val tensorImage = imageProcessor.process(TensorImage.fromBitmap(bitmap))
 
-        val imageProcessingOptions = ImageProcessingOptions.builder()
-            .build()
+            val imageProcessingOptions = ImageProcessingOptions.builder()
+                .build()
 
-        var inferenceTime = SystemClock.uptimeMillis()
-        val result = imageClassifier?.classify(tensorImage, imageProcessingOptions)
-        inferenceTime = SystemClock.uptimeMillis() - inferenceTime
-        classifierListener?.onResult(result = result, inferenceTime = inferenceTime)
+            var inferenceTime = SystemClock.uptimeMillis()
+            val result = imageClassifier?.classify(tensorImage, imageProcessingOptions)
+            inferenceTime = SystemClock.uptimeMillis() - inferenceTime
+            classifierListener?.onResult(result = result, inferenceTime = inferenceTime)
+        }
     }
 
     interface ClassifierListener {
